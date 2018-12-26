@@ -10,19 +10,18 @@
     "node": ">=0.10.29"
   },
   "scripts": {
-    "test": "mocha test/*test.js",
-    "testRecord": "REPLAY=record mocha -t 10000 test/*test.js"
+    "test": "mocha test/*test.js --exit"
   },
   "dependencies": {
     "backoff": "2.4.x",
     "bluebird": "2.3.x",
     "bunyan": "1.0.x",
-    "lodash": "2.4.x",
+    "lodash": "^2.4.x",
     "moment": "^2.23.0",
     "restler": "^3.4.0"
   },
   "devDependencies": {
-    "mocha": "2.0.x",
+    "mocha": "^5.2.0",
     "replay": "1.11.x"
   }
 }
