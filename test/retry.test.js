@@ -1,5 +1,4 @@
-var _ = require('lodash'),
-    Promise = require('bluebird'),
+var Promise = require('bluebird'),
     assert = require('assert'),
     errors = require('../lib/errors'),
     Connection = require('../lib/connection'),
@@ -100,6 +99,7 @@ describe('Retry logic', function() {
     var connection = getConnection(server),
         path = '/path';
 
+        
     connection.get(path, {
       headers: {
         'marketo-error-code': errors.marketoErrorCodes.TOKEN_EXPIRED

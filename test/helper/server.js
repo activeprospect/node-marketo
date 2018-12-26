@@ -84,15 +84,13 @@ TestServer.prototype = {
 
   // Get the count of all urls that match the regex
   countPattern: function(regex) {
-    return _.reduce(_.keys(this._counter), function(sum, k) {
-      if (k.match(regex)) {
-        return sum + this._counter[k];
+    let acc = 0;
+    Object.keys(this._counter).forEach(key => {
+      if (key.match(regex)) {
+        acc += this._counter[key];
       }
-
-      return sum;
-    }, 0, this);
-
-    return this._counter[key] || 0;
+    });
+    return acc;
   }
 };
 
