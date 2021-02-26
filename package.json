@@ -1,10 +1,10 @@
 {
   "name": "@activeprospect/node-marketo",
-  "version": "0.2.5",
-  "description": "marketo rest client",
+  "version": "0.7.8",
+  "description": "forked marketo rest client",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MadKudu/node-marketo/"
+    "url": "https://github.com/activeprospect/node-marketo/"
   },
   "engines": {
     "node": ">=4.8.5"
@@ -18,12 +18,12 @@
     "bluebird": "2.3.x",
     "bunyan": "1.0.x",
     "iconv-lite": "0.2.11",
-    "lodash": "4.17.15",
+    "lodash": "^4.17.21",
     "moment": "2.24.0",
     "qs": "6.9.x"
   },
   "devDependencies": {
-    "mocha": "5.0.x",
+    "mocha": "^8.3.0",
     "nock": "^11.7.0",
     "replay": "2.1.x",
     "rewire": "^4.0.1"
