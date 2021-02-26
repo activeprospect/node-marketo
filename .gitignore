@@ -1,4 +1,7 @@
 /node_modules/
 /.idea/
+/.history
 *.iml
 .DS_STORE
+test/helper/config.bk.js
+package-lock.json

@@ -1,19 +1,21 @@
 # node-marketo
 
-This implements (a subset of) Marketo's REST API.
-
-## Overview
-
-This library is a simple wrapper around Marketo's REST API and does not aim to be anything more than that.
+A wrapper around Marketo's REST API.
 
 ## Usage
+
+### Installation
+
+```
+npm install --save node-marketo-rest
+```
 
 ### Creating a connection
 
 You will first need to obtain your OAuth information from Marketo, they have a [guide out](http://developers.marketo.com/documentation/rest/authentication/) to get you started. In short, you will need to get the endpoint url, identity url, client id and client secret.
 
 ```js
-var Marketo = require('node-marketo');
+var Marketo = require('node-marketo-rest');
 
 var marketo = new Marketo({
   endpoint: 'https://123-ABC-456.mktorest.com/rest',
@@ -63,7 +65,7 @@ marketo.list.getLeads(1)
   .then(function(page1) {
     // do something with page1
 
-    if (data.nextPageToken) {
+    if (page1.nextPageToken) {
       return page1.nextPage();
     }
   })
@@ -77,8 +79,7 @@ marketo.list.getLeads(1)
 Instead of getting data back inside of the promise, you can also turn the response into a stream by using the `Marketo.streamify` function. This will emit the results one element at a time. If the result is paginated, it will lazily load all of the pages until it's done:
 
 ```js
-// Wraping the resulting promise
-var resultStream = Marketo.streamify(marketo.list.getLeads(1))
+return marketo.streamify('lead', 'getLeads', [ 1 ])
 
 resultStream
   .on('data', function(lead) {
@@ -91,8 +92,6 @@ resultStream
     // end of the stream
   });
 ```
-
-Since the data is lazily loaded, you can stop the stream and will not incur additional API calls:
 
 ```js
 var count = 0;
@@ -110,6 +109,58 @@ resultStream
     console.log('done, count is', count);
   });
 ```
+
+### Extract
+
+Bulk Extract provides a programmatic interface for retrieving large amounts of activity data out of Marketo.  For cases which do not require low latency, and need to transfer significant volumes of activity data out of Marketo, such as CRM-integration, ETL, data warehousing, and data archiving.
+
+The process requires you to `bulkLeadExtract.create` a request, then `bulkLeadExtract.enqueue` the request, then poll the `bulkLeadExtract.status`, `bulkLeadExtract.statusTilCompleted` will poll till completed, also while calling `bulkLeadExtract.cancel` for any errors.
+
+The `bulkLeadExtract.get` method will preform these all these actions for you.
+
+Then `bulkLeadExtract.file` or `bulkLeadExtract.fileStream` can be used to access the extracted file.
+
+Bulk Extract Leads
+```js
+marketo.bulkLeadExtract.get(
+  ['firstName', 'lastName', 'id', 'email'],
+  { staticListName: 'some list name' })
+  .then(function(data) {
+    // export is ready
+    let exportId = data.result[0].exportId;
+    return marketo.bulkLeadExtract.file(exportId);
+  })
+  .then(function(file) {
+    // do something with file
+  });
+```
+
+####Bulk Activity Extract
+Follow the same convention as bulk extracting leads, but provide different filter information for the start/end date, activity type ids and any other supported filters or parameters. [Marketo Docs] (http://developers.marketo.com/rest-api/bulk-extract/bulk-activity-extract/)
+
+
+```
+marketo.bulkActivityExtract.get(
+        {createdAt: {
+                startAt: '2018-07-01T23:59:59-00:00',
+                endAt:  '2018-07-03T23:59:59-00:00'
+            },
+            activityTypeIds: [
+                1, //example types
+                12,
+                13
+            ]})
+        .then(function(data) {
+            // export is ready
+            let exportId = data.result[0].exportId;
+            return marketo.bulkActivityExtract.file(exportId);
+        })
+        .then(function(file) {
+            //Do something with file
+        });
+});
+```
+
 
 # Test
 
@@ -151,10 +202,10 @@ generate only the needed data. To do so, you append `only` to a test:
 
 ```js
     // on a single unit test
-    it.only('test description, function() {})
+    it.only('test description', function() {})
 
     // or an entire describe
-    describe.only('test description, function() {})
+    describe.only('test description', function() {})
 ```
 
 One more thing to note is that once we've processed the raw data, `node-replay`
