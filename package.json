@@ -1,6 +1,6 @@
 {
   "name": "@activeprospect/node-marketo",
-  "version": "0.7.8",
+  "version": "0.7.9",
   "description": "forked marketo rest client",
   "repository": {
     "type": "git",
