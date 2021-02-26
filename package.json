@@ -10,7 +10,7 @@
     "node": ">=4.8.5"
   },
   "scripts": {
-    "test": "mocha test/*test.js --exit"
+    "test": "mocha test/*test.js --exit",
     "testRecord": "REPLAY=record mocha -t 10000 test/*test.js --exit"
   },
   "dependencies": {
